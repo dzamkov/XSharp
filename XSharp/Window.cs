@@ -19,7 +19,8 @@ namespace DHTW
     {
         public Window() : base(640, 480, GraphicsMode.Default, "XSharp")
         {
-
+            ISharpShape shape = new Sphere();
+            OctoTree tree = OctoTree.Create(shape, 4);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
