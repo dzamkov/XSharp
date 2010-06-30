@@ -1,0 +1,16 @@
+/bin
+/obj
+*/bin
+*/obj
+*/Debug
+*/Release
+*.vcproj.*
+*.user
+*.userprefs
+*.suo
+*.ncb
+*.pyc
+*/dist
+*.lkshw
+*.lkshs
+*.dia~
