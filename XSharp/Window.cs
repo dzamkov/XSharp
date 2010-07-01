@@ -2,6 +2,7 @@
 // Copyright (c) 2010, Dmitry Zamkov
 // Open source under the new BSD License
 //----------------------------------------
+// #define CREATE_DATA_FILE
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,6 +11,8 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
+
+
 
 namespace DHTW
 {
@@ -21,11 +24,19 @@ namespace DHTW
         public Window() : base(640, 480, GraphicsMode.Default, "XSharp")
         {
             GL.Enable(EnableCap.DepthTest);
-            //ISharpShape shape = new MandelBox(10).Subsect(new Vector(0.5, 0.5, 0.5), new Vector(0.5, 0.5, 0.5));
-            //this.Tree = OctoTree.Create(shape, 6);
+        #if CREATE_DATA_FILE
+            
+            ISharpShape shape = new MandelBox(10).Subsect(new Vector(0.5, 0.5, 0.5), new Vector(0.5, 0.5, 0.5));
+            this.Tree = OctoTree.Create(shape, 8);
 
+            FileStream file = new FileStream("mandelbox.dat", FileMode.Create);
+            this.Tree.Save(file);
+            file.Close();
+        #else
             FileStream file = new FileStream("mandelbox.dat", FileMode.Open);
             this.Tree = OctoTree.Load(file);
+            file.Close();
+        #endif
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
