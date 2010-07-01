@@ -19,8 +19,9 @@ namespace DHTW
     {
         public Window() : base(640, 480, GraphicsMode.Default, "XSharp")
         {
+            GL.Enable(EnableCap.DepthTest);
             ISharpShape shape = new MandelBox(10);
-            this.Tree = OctoTree.Create(shape, 5);
+            this.Tree = OctoTree.Create(shape, 6);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -38,7 +39,7 @@ namespace DHTW
 
             GL.PushMatrix();
             GL.Rotate((float)Rot, new Vector3(0.0f, 0.0f, 1.0f));
-            GL.PointSize(4.0f);
+            GL.PointSize(10.0f);
             GL.Begin(BeginMode.Points);
             this._DrawOctoTree(new Vector(0.0, 0.0, 0.0), new Vector(1.0, 1.0, 1.0), this.Tree);
             GL.End();
@@ -51,7 +52,7 @@ namespace DHTW
         {
             if (Tree == OctoTree.Full)
             {
-                GL.Color3(1.0f, 0.0f, 0.0f);
+                GL.Color3(Color.FromArgb(192, (int)(Offset.X * 126 + 127), (int)(Offset.Y * 126 + 127), (int)(Offset.Z * 126 + 127)));
                 GL.Vertex3(Offset);
             }
             else if (Tree == OctoTree.Empty)
@@ -81,7 +82,7 @@ namespace DHTW
         public static void Main(string[] Args)
         {
             Window win = new Window();
-            win.Run(60.0);
+            win.Run(199.0);
         }
 
         public double Rot = 0.0;
