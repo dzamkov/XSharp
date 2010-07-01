@@ -145,6 +145,39 @@ namespace DHTW
         }
 
         /// <summary>
+        /// Gets the offset of a child at the specified index.
+        /// </summary>
+        public static Vector Offset(int Index)
+        {
+            Vector offset;
+            if (Index % 2 < 1)
+            {
+                offset.Z = 0.5;
+            }
+            else
+            {
+                offset.Z = -0.5;
+            }
+            if (Index % 4 < 2)
+            {
+                offset.Y = 0.5;
+            }
+            else
+            {
+                offset.Y = -0.5;
+            }
+            if (Index % 8 < 4)
+            {
+                offset.X = 0.5;
+            }
+            else
+            {
+                offset.X = -0.5;
+            }
+            return offset;
+        }
+
+        /// <summary>
         /// Creates an octotree representation of a shape with the specified resolution(Tree depth).
         /// </summary>
         public static OctoTree Create(ISharpShape Shape, int Resolution)
@@ -154,40 +187,7 @@ namespace DHTW
                 OctoTree[] children = new OctoTree[8];
                 for (int t = 0; t < 8; t++)
                 {
-                    Vector npos;
-                    Vector nneg;
-                    if (t % 2 < 1)
-                    {
-                        npos.Z = 1.0;
-                        nneg.Z = 0.0;
-                    }
-                    else
-                    {
-                        npos.Z = 0.0;
-                        nneg.Z = -1.0;
-                    }
-                    if (t % 4 < 2)
-                    {
-                        npos.Y = 1.0;
-                        nneg.Y = 0.0;
-                    }
-                    else
-                    {
-                        npos.Y = 0.0;
-                        nneg.Y = -1.0;
-                    }
-                    if (t % 8 < 4)
-                    {
-                        npos.X = 1.0;
-                        nneg.X = 0.0;
-                    }
-                    else
-                    {
-                        npos.X = 0.0;
-                        nneg.X = -1.0;
-                    }
-
-                    children[t] = Create(Shape.Subsect(npos, nneg), Resolution - 1);
+                    children[t] = Create(Shape.Subsect(Offset(t), new Vector(0.5, 0.5, 0.5)), Resolution - 1);
                 }
                 return Get(children);
             }

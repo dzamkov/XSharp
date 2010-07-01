@@ -22,7 +22,7 @@ namespace DHTW
         /// <summary>
         /// Creates an orthagonal subsection of the shape in the specified rectangular box.
         /// </summary>
-        ISharpShape Subsect(Vector Pos, Vector Neg);
+        ISharpShape Subsect(Vector Offset, Vector Size);
     }
 
     /// <summary>
@@ -35,9 +35,9 @@ namespace DHTW
             return Position.Length() < 1.0;
         }
 
-        public ISharpShape Subsect(Vector Pos, Vector Neg)
+        public ISharpShape Subsect(Vector Offset, Vector Scale)
         {
-            return new Subsection(this, Pos, Neg);
+            return new Subsection(this, Offset, Scale);
         }
     }
 
@@ -46,31 +46,30 @@ namespace DHTW
     /// </summary>
     public class Subsection : ISharpShape
     {
-        public Subsection(ISharpShape Source, Vector Pos, Vector Neg)
+        public Subsection(ISharpShape Source, Vector Offset, Vector Scale)
         {
             this._Source = Source;
-            this._Scale = (Pos - Neg) * 0.5;
-            this._Mid = Neg + this._Scale;
+            this._Scale = Scale;
+            this._Offset = Offset;
         }
 
         public bool Occupies(Vector Position)
         {
             Position.Scale(this._Scale);
-            Position.Add(this._Mid);
+            Position.Add(this._Offset);
             return this._Source.Occupies(Position);
         }
 
-        public ISharpShape Subsect(Vector Pos, Vector Neg)
+        public ISharpShape Subsect(Vector Offset, Vector Scale)
         {
-            Pos.Scale(this._Scale);
-            Neg.Scale(this._Scale);
-            Pos.Add(this._Mid);
-            Neg.Add(this._Mid);
-            return this._Source.Subsect(Pos, Neg);
+            Offset.Scale(this._Scale);
+            Scale.Scale(this._Scale);
+            Offset.Add(this._Offset);
+            return this._Source.Subsect(Offset, Scale);
         }
 
         private ISharpShape _Source;
         private Vector _Scale;
-        private Vector _Mid;
+        private Vector _Offset;
     }
 }
