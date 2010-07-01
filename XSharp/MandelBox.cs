@@ -86,9 +86,9 @@ namespace DHTW
             return true;
         }
 
-        public ISharpShape Subsect(Vector Pos, Vector Neg)
+        public ISharpShape Subsect(Vector Offset, Vector Scale)
         {
-            return new Subsection(this, Pos, Neg);
+            return new Subsection(this, Offset, Scale);
         }
 
         private uint _IterMax;

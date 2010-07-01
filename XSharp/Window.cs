@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
@@ -20,8 +21,11 @@ namespace DHTW
         public Window() : base(640, 480, GraphicsMode.Default, "XSharp")
         {
             GL.Enable(EnableCap.DepthTest);
-            ISharpShape shape = new MandelBox(10);
-            this.Tree = OctoTree.Create(shape, 6);
+            //ISharpShape shape = new MandelBox(10).Subsect(new Vector(0.5, 0.5, 0.5), new Vector(0.5, 0.5, 0.5));
+            //this.Tree = OctoTree.Create(shape, 6);
+
+            FileStream file = new FileStream("mandelbox.dat", FileMode.Open);
+            this.Tree = OctoTree.Load(file);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
