@@ -22,7 +22,7 @@ namespace DHTW
     /// The main unit of storage for fractals. Each octotree unit is a cube with 8 child cubes for
     /// each corner and specify where the fractal is in their volumes.
     /// </summary>
-    public class OctoTree
+    public class OctoTree : IBlockyShape
     {
         private OctoTree()
         {
@@ -247,6 +247,56 @@ namespace DHTW
                     this.NNN
                 };
             }
+        }
+
+        IBlockyShape[] IBlockyShape.Children
+        {
+            get
+            {
+                return (IBlockyShape[])this.Children;
+            }
+        }
+
+        public BlockyShapeContent Content
+        {
+            get 
+            {
+                if (this == _Full)
+                {
+                    return BlockyShapeContent.Full;
+                }
+                else if (this == _Empty)
+                {
+                    return BlockyShapeContent.Empty;
+                }
+                else
+                {
+                    return BlockyShapeContent.Partial;
+                }
+            }
+        }
+
+        public bool Occupies(Vector Position)
+        {
+            switch (this.Content)
+            {
+                case BlockyShapeContent.Full:
+                    return true;
+                case BlockyShapeContent.Empty:
+                    return false;
+                case BlockyShapeContent.Partial:
+                    int index = 0;
+                    if (Position.Z < 0.0) { index += 1; Position.Z += 1.0; }
+                    if (Position.Y < 0.0) { index += 2; Position.Y += 1.0; }
+                    if (Position.X < 0.0) { index += 4; Position.X += 1.0; }
+                    return this[index].Occupies(Position * 2 - new Vector(1.0, 1.0, 1.0));
+            }
+            return false;
+        }
+
+        public ISharpShape Subsect(Vector Offset, Vector Size)
+        {
+            return new Subsection(this, Offset, Size);
         }
 
         /// <summary>

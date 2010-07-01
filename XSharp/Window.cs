@@ -2,7 +2,6 @@
 // Copyright (c) 2010, Dmitry Zamkov
 // Open source under the new BSD License
 //----------------------------------------
-// #define CREATE_DATA_FILE
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,19 +23,30 @@ namespace DHTW
         public Window() : base(640, 480, GraphicsMode.Default, "XSharp")
         {
             GL.Enable(EnableCap.DepthTest);
-        #if CREATE_DATA_FILE
-            
-            ISharpShape shape = new MandelBox(10).Subsect(new Vector(0.5, 0.5, 0.5), new Vector(0.5, 0.5, 0.5));
-            this.Tree = OctoTree.Create(shape, 8);
 
-            FileStream file = new FileStream("mandelbox.dat", FileMode.Create);
-            this.Tree.Save(file);
-            file.Close();
-        #else
-            FileStream file = new FileStream("mandelbox.dat", FileMode.Open);
-            this.Tree = OctoTree.Load(file);
-            file.Close();
-        #endif
+            ISharpShape shape = new Sphere().Subsect(new Vector(0.5, 0.5, 0.5), new Vector(0.5, 0.5, 0.5));
+            this.Tree = OctoTree.Create(shape, 5);
+
+
+            PointCloud.Point[] points = new PointCloud.Point[4096];
+            for (int t = 0; t < points.Length; t++)
+            {
+                double ang = (double)t / (double)points.Length * Math.PI * 2.0;
+                double elv = (double)Math.Sin(ang * 100.0);
+                double x = (double)Math.Sin(ang);
+                double z = (double)Math.Cos(ang);
+                points[t] = new PointCloud.Point()
+                {
+                    Position = new Vector(x, z, elv),
+                    A = 255,
+                    R = 0,
+                    G = 255,
+                    B = 0
+                };
+            }
+
+            this.MyPointCloud = new PointCloud();
+            this.MyPointCloud.Submit(points, 2.0f);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -54,10 +64,11 @@ namespace DHTW
 
             GL.PushMatrix();
             GL.Rotate((float)Rot, new Vector3(0.0f, 0.0f, 1.0f));
-            GL.PointSize(10.0f);
+            this.MyPointCloud.Render();
+            /*GL.PointSize(10.0f);
             GL.Begin(BeginMode.Points);
             this._DrawOctoTree(new Vector(0.0, 0.0, 0.0), new Vector(1.0, 1.0, 1.0), this.Tree);
-            GL.End();
+            GL.End();*/
             GL.PopMatrix();
 
             this.SwapBuffers();
@@ -101,6 +112,7 @@ namespace DHTW
         }
 
         public double Rot = 0.0;
+        public PointCloud MyPointCloud;
         public OctoTree Tree;
     }
 }
