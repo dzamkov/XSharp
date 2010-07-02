@@ -52,10 +52,12 @@
   <ItemGroup>
     <Compile Include="BlockyShape.cs" />
     <Compile Include="MandelBox.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="OctoTree.cs" />
     <Compile Include="PointCloud.cs" />
     <Compile Include="SharpShape.cs" />
     <Compile Include="Vector.cs" />
+    <Compile Include="View.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>

@@ -28,7 +28,7 @@ namespace DHTW
             this.Tree = OctoTree.Create(shape, 5);
 
 
-            PointCloud.Point[] points = new PointCloud.Point[4096];
+            PointCloud.Point[] points = new PointCloud.Point[80000];
             for (int t = 0; t < points.Length; t++)
             {
                 double ang = (double)t / (double)points.Length * Math.PI * 2.0;
@@ -108,7 +108,7 @@ namespace DHTW
         public static void Main(string[] Args)
         {
             Window win = new Window();
-            win.Run(199.0);
+            win.Run();
         }
 
         public double Rot = 0.0;
